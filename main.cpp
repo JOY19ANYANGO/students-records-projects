@@ -2,23 +2,54 @@
 using namespace std;
 #include <fstream> // For file I/O
 #include <cstdlib> // for atexit()
+#include <iomanip> // Include the <iomanip> header for setw
+
+
+
+
 
 class Node{
-    public:
+public:
     int key;
     string first_name;
     string last_name;
-    Node*next;
+    char gender;
+    int age;
+    int marks_FEE3132;
+    int marks_FEE3162;
+    int marks_FMM3152;
+    int marks_SMA3112;
+    int marks_SMA3122;
+    int marks_SPH3108;
+    Node* next;
+    
     Node(){
         key = 0;
         first_name = "name";
-        last_name ="last name";
-        next=NULL;
+        last_name = "last name";
+        gender = ' ';
+        age = 0;
+        marks_FEE3132 = 0;
+        marks_FEE3162 = 0;
+        marks_FMM3152 = 0;
+        marks_SMA3112 = 0;
+        marks_SMA3122 = 0;
+        marks_SPH3108 = 0;
+        next = NULL;
     }
-    Node(int k, string d,string l){
+    
+    Node(int k, string d, string l, char g, int a, int m_FEE3132, int m_FEE3162, int m_FMM3152, int m_SMA3112, int m_SMA3122, int m_SPH3108){
         key = k;
         first_name = d;
-        last_name=l;
+        last_name = l;
+        gender = g;
+        age = a;
+        marks_FEE3132 = m_FEE3132;
+        marks_FEE3162 = m_FEE3162;
+        marks_FMM3152 = m_FMM3152;
+        marks_SMA3112 = m_SMA3112;
+        marks_SMA3122 = m_SMA3122;
+        marks_SPH3108 = m_SPH3108;
         next = NULL;
     }
 };
@@ -92,15 +123,36 @@ class Stack{
         return count;
         }
 
-void display(){
-    
-        cout << "All values in the Stack are :" << endl;
-        Node * temp = top;
-        while (temp != NULL) {
-        cout << "(FEE3/" << temp->key << "/2023" ":" << temp->first_name << " " << temp->last_name << ")" << endl;
-        temp = temp -> next;
+
+void display() {
+    // Define the column headers
+    cout << "========================================================================" << endl;
+    cout << "| Key | Age | Gender | Name          | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 |" << endl;
+    cout << "========================================================================" << endl;
+
+    Node* temp = top;
+    while (temp != nullptr) {
+        // Limit the length of the name to fit within 15 characters
+        string truncated_name = temp->first_name + " " + temp->last_name;
+        if (truncated_name.length() > 15) {
+            truncated_name = truncated_name.substr(0, 12) + "...";
         }
+
+        // Output the student information with adjusted formatting
+        cout << "| " << setw(4) << temp->key << " | " << setw(3) << temp->age << " | " << setw(6) << temp->gender << " | "
+             << setw(13) << left << truncated_name << " | "
+             << setw(7) << temp->marks_FEE3132 << " | "
+             << setw(7) << temp->marks_FEE3162 << " | "
+             << setw(7) << temp->marks_FMM3152 << " | "
+             << setw(7) << temp->marks_SMA3112 << " | "
+             << setw(7) << temp->marks_SMA3122 << " | "
+             << setw(7) << temp->marks_SPH3108 << " |" << endl;
+
+        temp = temp->next;
+    }
+    cout << "========================================================================" << endl;
 }
+
 
 void sort() {
     if (isEmpty()) {
@@ -196,7 +248,11 @@ void saveToFile(Stack &s) {
 
     Node *temp = s.top;
     while (temp != nullptr) {
-        outfile << temp->key << " " << temp->first_name << " " << temp->last_name << endl;
+        outfile << temp->key << " " << temp->first_name << " " << temp->last_name << " "
+                << temp->gender << " " << temp->age << " "
+                << temp->marks_FEE3132 << " " << temp->marks_FEE3162 << " "
+                << temp->marks_FMM3152 << " " << temp->marks_SMA3112 << " "
+                << temp->marks_SMA3122 << " " << temp->marks_SPH3108 << endl;
         temp = temp->next;
     }
 
@@ -213,18 +269,34 @@ void loadFromFile(Stack &s) {
 
     int key;
     string first_name, last_name;
-    while (infile >> key >> first_name >> last_name) {
-        Node *new_node = new Node(key, first_name, last_name);
+    char gender;
+    int age;
+    int marks_FEE3132, marks_FEE3162, marks_FMM3152, marks_SMA3112, marks_SMA3122, marks_SPH3108;
+
+    while (infile >> key >> first_name >> last_name >> gender >> age
+                 >> marks_FEE3132 >> marks_FEE3162 >> marks_FMM3152
+                 >> marks_SMA3112 >> marks_SMA3122 >> marks_SPH3108) {
+       Node* new_node = new Node(key, first_name, last_name, gender, age,
+                              marks_FEE3132, marks_FEE3162, marks_FMM3152,
+                              marks_SMA3112, marks_SMA3122, marks_SPH3108);
+        new_node->marks_FEE3132 = marks_FEE3132;
+        new_node->marks_FEE3162 = marks_FEE3162;
+        new_node->marks_FMM3152 = marks_FMM3152;
+        new_node->marks_SMA3112 = marks_SMA3112;
+        new_node->marks_SMA3122 = marks_SMA3122;
+        new_node->marks_SPH3108 = marks_SPH3108;
         s.push(new_node);
     }
 
     infile.close();
 }
+
 static Stack s1; // Declare s1 as static variable
 
 void saveOnExit() {
     saveToFile(s1);
 }
+
 
 
 
@@ -236,9 +308,11 @@ int main() {
    
     loadFromFile(s1); // Load previously saved data
 
-    int option, key ;
+    int option, key ,age;
     string first_name;
     string last_name;
+    char gender;
+
     do {
     cout << "What operation do you want to perform?" <<
     "Select Option number. Enter 0 to exit." << endl;
@@ -257,19 +331,49 @@ int main() {
     switch (option) {
     case 0:
     break;
-    case 1:
-    cout << "Enter registration number of the student to add in the list" <<
-    endl;
-    cin >> key;
-    cout << "Enter name of the student to add in the list" <<
-    endl;
-    cin>>first_name ;
-    cin >> last_name;
-    new_node -> key = key;
-    new_node -> first_name= first_name;
-    new_node -> last_name= last_name;
-    s1.push(new_node);
-    break;
+ case 1:
+                cout << "Enter registration number of the student to add in the list" << endl;
+                cin >> key;
+                cout << "Enter name of the student to add in the list" << endl;
+                cin >> first_name;
+                cin >> last_name;
+                cout << "Enter the gender of the student to add in the list('M' or 'F')" << endl;
+                cin >> gender;
+                cout << "Enter the age of the student to add in the list" << endl;
+                cin >> age;
+                cout << "Enter marks for FEE3132: ";
+                int marks_FEE3132;
+                cin >> marks_FEE3132;
+                cout << "Enter marks for FEE3162: ";
+                int marks_FEE3162;
+                cin >> marks_FEE3162;
+                cout << "Enter marks for FMM3152: ";
+                int marks_FMM3152;
+                cin >> marks_FMM3152;
+                cout << "Enter marks for SMA3112: ";
+                int marks_SMA3112;
+                cin >> marks_SMA3112;
+                cout << "Enter marks for SMA3122: ";
+                int marks_SMA3122;
+                cin >> marks_SMA3122;
+                cout << "Enter marks for SPH3108: ";
+                int marks_SPH3108;
+                cin >> marks_SPH3108;
+
+                new_node->key = key;
+                new_node->first_name = first_name;
+                new_node->last_name = last_name;
+                new_node->gender = gender;
+                new_node->age = age;
+                new_node->marks_FEE3132 = marks_FEE3132;
+                new_node->marks_FEE3162 = marks_FEE3162;
+                new_node->marks_FMM3152 = marks_FMM3152;
+                new_node->marks_SMA3112 = marks_SMA3112;
+                new_node->marks_SMA3122 = marks_SMA3122;
+                new_node->marks_SPH3108 = marks_SPH3108;
+
+                s1.push(new_node);
+                break;
     case 2:
     cout << "Pop Function Called - Poped Value: " << endl;
         new_node = s1.pop();
