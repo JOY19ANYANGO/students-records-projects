@@ -283,6 +283,47 @@ void sort() {
     display();
 }
 
+
+void sortAggregate() {
+    if (isEmpty()) {
+        cout << "Stack is empty, nothing to sort." << endl;
+        return;
+    }
+    
+    bool sorted = false;
+    while (!sorted) {
+        Node* current = top;
+        Node* prev = nullptr;
+        sorted = true; // Assume the stack is sorted
+
+        while (current->next != nullptr) {
+            // If current node's key is greater than the next node's key, swap
+            if (current->totalMarks < current->next->totalMarks) {
+                sorted = false; // Set sorted to false as swapping is needed
+
+                // Swap the nodes
+                Node* temp = current->next;
+                current->next = temp->next;
+                temp->next = current;
+                if (prev == nullptr) {
+                    top = temp;
+                } else {
+                    prev->next = temp;
+                }
+                prev = temp;
+            } else {
+                prev = current;
+                current = current->next;
+            }
+        }
+    }
+
+    cout << "Stack sorted successfully using bubble sort." << endl;
+    display();
+}
+
+
+
 void binarySearchByKey(int key) {
     sort(); // Assuming this sorts the stack
 
@@ -431,8 +472,9 @@ int main() {
     cout << "5.See the total number of students : count()" << endl;
     cout << "6.Display all the students in the list : display()" << endl;
     cout<< "7.Sort the names of the students according to registration number(ascending order)"<<endl;
-    cout<<"8.Search for a student using registration number..."<<endl;
-    cout << "9. Clear Screen" << endl << endl;
+    cout<< "8.Sort the names of the students according to aggregate(descending order)"<<endl;
+    cout<<"9.Search for a student using registration number..."<<endl;
+    cout << "10. Clear Screen" << endl << endl;
     cin >> option;
     //Node n1 = new Node();
     Node * new_node = new Node();
@@ -540,14 +582,19 @@ int main() {
     s1.sort();
     cout << "Sorting completed." << endl;
     break;
-   case 8:
+    case 8:
+    cout << "Sorting the stack..." << endl;
+    s1.sortAggregate();
+    cout << "Sorting completed." << endl;
+    break;
+   case 9:
     cout << "Enter the registration number to search: ";
     cin >> key;
      s1.binarySearchByKey(key);
     
     break;
 
-    case 9:
+    case 10:
     system("cls");
     break;
     default:
