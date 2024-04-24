@@ -170,10 +170,9 @@ class Stack{
 
 
 void display() {
-    // Define the column headers with adjusted widths
-    cout << "===================================================================================================================" << endl;
-    cout << "| Key | Age | Gender | Name    | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 | FEE3131 | FEE3161 | SMA3113 | SMA3121 | SPH3107 | Aggregate | Grade | Average" << endl;
-    cout << "===================================================================================================================" << endl;
+    cout << "===================================================================================================================================" << endl;
+    cout << "| Key | Age | Gender | Name            | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 | FEE3131 | FEE3161 | SMA3113 | SMA3121 | SPH3107 | Aggregate | Grade | Average |" << endl;
+    cout << "===================================================================================================================================" << endl;
 
     Node* temp = top;
     while (temp != nullptr) {
@@ -184,10 +183,10 @@ void display() {
         }
 
         // Output the student information with adjusted formatting
-        cout << "| " << setw(3) << temp->key << " | "
-             << setw(3) << temp->age << " | "
-             << setw(3) << temp->gender << " | "
-             << setw(5) << left << truncated_name << " | "
+        cout << "| " << setw(2) << temp->key << " | "
+             << setw(2) << temp->age << " | "
+             << setw(4) << temp->gender << " | "
+             << setw(14) << left << truncated_name << " | "
              << setw(5) << temp->marks_FEE3132 << " | "
              << setw(5) << temp->marks_FEE3162 << " | "
              << setw(5) << temp->marks_FMM3152 << " | "
@@ -200,13 +199,14 @@ void display() {
              << setw(5) << temp->marks_SMA3121 << " | "
              << setw(5) << temp->marks_SPH3107 << " | "
              << setw(9) << temp->totalMarks << " | "
-             << setw(6) << temp->grade << " | "
-             << setw(7) << temp->average << " | " << endl;
+             << setw(4) << temp->grade << " | "
+             << setw(6) << temp->average << " |" << endl;
 
         temp = temp->next;
     }
-    cout << "===================================================================================================================" << endl;
+    cout << "===================================================================================================================================" << endl;
 }
+
 
 
 
