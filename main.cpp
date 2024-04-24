@@ -21,6 +21,16 @@ public:
     int marks_SMA3112;
     int marks_SMA3122;
     int marks_SPH3108;
+    int marks_FEE3131;
+    int marks_FEE3161;
+    int marks_SPH3107;
+    int marks_SMA3113;
+    int marks_SMA3121;
+    float totalMarks;
+    char grade;
+    float average;
+
+
     Node* next;
     
     Node(){
@@ -35,10 +45,16 @@ public:
         marks_SMA3112 = 0;
         marks_SMA3122 = 0;
         marks_SPH3108 = 0;
+        marks_FEE3131 = 0;
+        marks_FEE3161 = 0;
+        marks_SMA3113 = 0;
+        marks_SMA3121 = 0;
+        marks_SPH3107 = 0;
+
         next = NULL;
     }
     
-    Node(int k, string d, string l, char g, int a, int m_FEE3132, int m_FEE3162, int m_FMM3152, int m_SMA3112, int m_SMA3122, int m_SPH3108){
+    Node(int k, string d, string l, char g, int a, int m_FEE3132, int m_FEE3162, int m_FMM3152, int m_SMA3112, int m_SMA3122, int m_SPH3108,int m_FEE3131, int m_FEE3161,  int m_SMA3113, int m_SMA3121, int m_SPH3107){
         key = k;
         first_name = d;
         last_name = l;
@@ -50,8 +66,14 @@ public:
         marks_SMA3112 = m_SMA3112;
         marks_SMA3122 = m_SMA3122;
         marks_SPH3108 = m_SPH3108;
+        marks_FEE3131 = m_FEE3131;
+        marks_FEE3161 = m_FEE3161;
+        marks_SMA3113 = m_SMA3113;
+        marks_SMA3121 = m_SMA3112;
+        marks_SPH3107 = m_SPH3107;
         next = NULL;
     }
+    
 };
 class Stack{
     public:
@@ -127,7 +149,7 @@ class Stack{
 void display() {
     // Define the column headers
     cout << "========================================================================" << endl;
-    cout << "| Key | Age | Gender | Name          | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 |" << endl;
+    cout << "| Key | Age | Gender | Name     | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 | FEE3131| FEE3161 |  SMA3113 | SMA3121 | SPH3107 |" << endl;
     cout << "========================================================================" << endl;
 
     Node* temp = top;
@@ -139,14 +161,19 @@ void display() {
         }
 
         // Output the student information with adjusted formatting
-        cout << "| " << setw(4) << temp->key << " | " << setw(3) << temp->age << " | " << setw(6) << temp->gender << " | "
-             << setw(13) << left << truncated_name << " | "
-             << setw(7) << temp->marks_FEE3132 << " | "
-             << setw(7) << temp->marks_FEE3162 << " | "
-             << setw(7) << temp->marks_FMM3152 << " | "
-             << setw(7) << temp->marks_SMA3112 << " | "
-             << setw(7) << temp->marks_SMA3122 << " | "
-             << setw(7) << temp->marks_SPH3108 << " |" << endl;
+        cout << "| " << setw(3) << temp->key << " | " << setw(1) << temp->age << " | " << setw(1) << temp->gender << " | "
+             << setw(10) << left << truncated_name << " | "
+             << setw(1) << temp->marks_FEE3132 << " | "
+             << setw(1) << temp->marks_FEE3162 << " | "
+             << setw(1) << temp->marks_FMM3152 << " | "
+             << setw(1) << temp->marks_SMA3112 << " | "
+             << setw(1) << temp->marks_SMA3122 << " | "
+             << setw(1) << temp->marks_SPH3108 << " | " 
+             << setw(1) << temp->marks_FEE3131 << " | "
+             << setw(1) << temp->marks_FEE3161 << " | "
+             << setw(1) << temp->marks_SMA3113 << " | "
+             << setw(1) << temp->marks_SMA3121 << " | "
+             << setw(1) << temp->marks_SPH3107 << " | " << endl;
 
         temp = temp->next;
     }
@@ -191,6 +218,7 @@ void sort() {
     cout << "Stack sorted successfully using bubble sort." << endl;
     display();
 }
+
 void binarySearchByKey(int key) {
     sort(); // Assuming this sorts the stack
 
@@ -252,7 +280,10 @@ void saveToFile(Stack &s) {
                 << temp->gender << " " << temp->age << " "
                 << temp->marks_FEE3132 << " " << temp->marks_FEE3162 << " "
                 << temp->marks_FMM3152 << " " << temp->marks_SMA3112 << " "
-                << temp->marks_SMA3122 << " " << temp->marks_SPH3108 << endl;
+                << temp->marks_SMA3122 << " " << temp->marks_SPH3108 << " "
+                << temp->marks_FEE3131 << " " << temp->marks_FEE3161 << " "
+                << temp->marks_SMA3113 << " "
+                << temp->marks_SMA3121 << " " << temp->marks_SPH3107 << endl;
         temp = temp->next;
     }
 
@@ -272,19 +303,27 @@ void loadFromFile(Stack &s) {
     char gender;
     int age;
     int marks_FEE3132, marks_FEE3162, marks_FMM3152, marks_SMA3112, marks_SMA3122, marks_SPH3108;
-
+    int marks_FEE3131, marks_FEE3161,  marks_SMA3113, marks_SMA3121, marks_SPH3107;
     while (infile >> key >> first_name >> last_name >> gender >> age
                  >> marks_FEE3132 >> marks_FEE3162 >> marks_FMM3152
-                 >> marks_SMA3112 >> marks_SMA3122 >> marks_SPH3108) {
+                 >> marks_SMA3112 >> marks_SMA3122 >> marks_SPH3108
+                 >> marks_FEE3131 >> marks_FEE3161 
+                 >> marks_SMA3113 >> marks_SMA3121 >> marks_SPH3107) {
        Node* new_node = new Node(key, first_name, last_name, gender, age,
                               marks_FEE3132, marks_FEE3162, marks_FMM3152,
-                              marks_SMA3112, marks_SMA3122, marks_SPH3108);
+                              marks_SMA3112, marks_SMA3122, marks_SPH3108,marks_FEE3131, marks_FEE3161, 
+                              marks_SMA3113, marks_SMA3121, marks_SPH3107);
         new_node->marks_FEE3132 = marks_FEE3132;
         new_node->marks_FEE3162 = marks_FEE3162;
         new_node->marks_FMM3152 = marks_FMM3152;
         new_node->marks_SMA3112 = marks_SMA3112;
         new_node->marks_SMA3122 = marks_SMA3122;
         new_node->marks_SPH3108 = marks_SPH3108;
+        new_node->marks_FEE3131 = marks_FEE3131;
+        new_node->marks_FEE3161 = marks_FEE3161;
+        new_node->marks_SMA3113 = marks_SMA3113;
+        new_node->marks_SMA3121 = marks_SMA3121;
+        new_node->marks_SPH3107 = marks_SPH3107;
         s.push(new_node);
     }
 
@@ -296,6 +335,8 @@ static Stack s1; // Declare s1 as static variable
 void saveOnExit() {
     saveToFile(s1);
 }
+
+
 
 
 
@@ -359,6 +400,22 @@ int main() {
                 cout << "Enter marks for SPH3108: ";
                 int marks_SPH3108;
                 cin >> marks_SPH3108;
+                cout << "Enter marks for FEE3131: ";
+                int marks_FEE3131;
+                cin >> marks_FEE3131;
+                cout << "Enter marks for FEE3161: ";
+                int marks_FEE3161;
+                cin >> marks_FEE3161;
+                
+                cout << "Enter marks for SMA3113: ";
+                int marks_SMA3113;
+                cin >> marks_SMA3113;
+                cout << "Enter marks for SMA3121: ";
+                int marks_SMA3121;
+                cin >> marks_SMA3121;
+                cout << "Enter marks for SPH3107: ";
+                int marks_SPH3107;
+                cin >> marks_SPH3107;
 
                 new_node->key = key;
                 new_node->first_name = first_name;
@@ -371,6 +428,11 @@ int main() {
                 new_node->marks_SMA3112 = marks_SMA3112;
                 new_node->marks_SMA3122 = marks_SMA3122;
                 new_node->marks_SPH3108 = marks_SPH3108;
+                new_node->marks_FEE3131 = marks_FEE3131;
+                new_node->marks_FEE3161 = marks_FEE3161;
+                new_node->marks_SMA3113 = marks_SMA3113;
+                new_node->marks_SMA3121 = marks_SMA3121;
+                new_node->marks_SPH3107 = marks_SPH3107;
 
                 s1.push(new_node);
                 break;
