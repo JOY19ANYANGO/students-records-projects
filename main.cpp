@@ -26,9 +26,9 @@ public:
     int marks_SPH3107;
     int marks_SMA3113;
     int marks_SMA3121;
-    float totalMarks;
+    int totalMarks;
     char grade;
-    float average;
+    int average;
 
 
     Node* next;
@@ -73,7 +73,27 @@ public:
         marks_SPH3107 = m_SPH3107;
         next = NULL;
     }
-    
+    // Function to calculate total marks, grade, and average
+    void calculateMetrics() {
+        totalMarks = marks_FEE3132 + marks_FEE3162 + marks_FMM3152 +
+                     marks_SMA3112 + marks_SMA3122 + marks_SPH3108 +
+                     marks_FEE3131 + marks_FEE3161 + marks_SMA3113 +
+                     marks_SMA3121 + marks_SPH3107;
+
+        average = totalMarks / 11; // Assuming 11 subjects
+        // Assuming grade calculation logic based on total marks
+        if (totalMarks >= 90) {
+            grade = 'A';
+        } else if (totalMarks >= 80) {
+            grade = 'B';
+        } else if (totalMarks >= 70) {
+            grade = 'C';
+        } else if (totalMarks >= 60) {
+            grade = 'D';
+        } else {
+            grade = 'F';
+        }
+    }
 };
 class Stack{
     public:
@@ -104,6 +124,7 @@ class Stack{
         if (top == NULL) {
         top = n;
         cout << "Student added successfully" << endl;
+        n->calculateMetrics();
         } else if (checkIfNodeExist(n)) {
         cout << "Student with this registration already exist in the list " <<
         "Enter different registration  number" << endl;
@@ -111,7 +132,9 @@ class Stack{
         Node * temp = top;
         top = n;
         n -> next = temp;
+        n->calculateMetrics(); 
         cout << "Student added successfully" << endl;
+
         
         }
     }
@@ -147,10 +170,10 @@ class Stack{
 
 
 void display() {
-    // Define the column headers
-    cout << "========================================================================" << endl;
-    cout << "| Key | Age | Gender | Name     | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 | FEE3131| FEE3161 |  SMA3113 | SMA3121 | SPH3107 |" << endl;
-    cout << "========================================================================" << endl;
+    // Define the column headers with adjusted widths
+    cout << "===================================================================================================================" << endl;
+    cout << "| Key | Age | Gender | Name    | FEE3132 | FEE3162 | FMM3152 | SMA3112 | SMA3122 | SPH3108 | FEE3131 | FEE3161 | SMA3113 | SMA3121 | SPH3107 | Aggregate | Grade | Average" << endl;
+    cout << "===================================================================================================================" << endl;
 
     Node* temp = top;
     while (temp != nullptr) {
@@ -161,24 +184,30 @@ void display() {
         }
 
         // Output the student information with adjusted formatting
-        cout << "| " << setw(3) << temp->key << " | " << setw(1) << temp->age << " | " << setw(1) << temp->gender << " | "
-             << setw(10) << left << truncated_name << " | "
-             << setw(1) << temp->marks_FEE3132 << " | "
-             << setw(1) << temp->marks_FEE3162 << " | "
-             << setw(1) << temp->marks_FMM3152 << " | "
-             << setw(1) << temp->marks_SMA3112 << " | "
-             << setw(1) << temp->marks_SMA3122 << " | "
-             << setw(1) << temp->marks_SPH3108 << " | " 
-             << setw(1) << temp->marks_FEE3131 << " | "
-             << setw(1) << temp->marks_FEE3161 << " | "
-             << setw(1) << temp->marks_SMA3113 << " | "
-             << setw(1) << temp->marks_SMA3121 << " | "
-             << setw(1) << temp->marks_SPH3107 << " | " << endl;
+        cout << "| " << setw(3) << temp->key << " | "
+             << setw(3) << temp->age << " | "
+             << setw(3) << temp->gender << " | "
+             << setw(5) << left << truncated_name << " | "
+             << setw(5) << temp->marks_FEE3132 << " | "
+             << setw(5) << temp->marks_FEE3162 << " | "
+             << setw(5) << temp->marks_FMM3152 << " | "
+             << setw(5) << temp->marks_SMA3112 << " | "
+             << setw(5) << temp->marks_SMA3122 << " | "
+             << setw(5) << temp->marks_SPH3108 << " | "
+             << setw(5) << temp->marks_FEE3131 << " | "
+             << setw(5) << temp->marks_FEE3161 << " | "
+             << setw(5) << temp->marks_SMA3113 << " | "
+             << setw(5) << temp->marks_SMA3121 << " | "
+             << setw(5) << temp->marks_SPH3107 << " | "
+             << setw(9) << temp->totalMarks << " | "
+             << setw(6) << temp->grade << " | "
+             << setw(7) << temp->average << " | " << endl;
 
         temp = temp->next;
     }
-    cout << "========================================================================" << endl;
+    cout << "===================================================================================================================" << endl;
 }
+
 
 
 void sort() {
@@ -266,7 +295,7 @@ void binarySearchByKey(int key) {
 
 };
 
-void saveToFile(Stack &s) {
+void saveToFile(Stack& s) {
     ofstream outfile("stack_data.txt", ios::out);
 
     if (!outfile) {
@@ -274,23 +303,28 @@ void saveToFile(Stack &s) {
         return;
     }
 
-    Node *temp = s.top;
+    Node* temp = s.top;
     while (temp != nullptr) {
+        // Calculate metrics before saving to file
+        temp->calculateMetrics();
+
+        // Write data to file including grade, average, and total marks
         outfile << temp->key << " " << temp->first_name << " " << temp->last_name << " "
                 << temp->gender << " " << temp->age << " "
                 << temp->marks_FEE3132 << " " << temp->marks_FEE3162 << " "
                 << temp->marks_FMM3152 << " " << temp->marks_SMA3112 << " "
                 << temp->marks_SMA3122 << " " << temp->marks_SPH3108 << " "
                 << temp->marks_FEE3131 << " " << temp->marks_FEE3161 << " "
-                << temp->marks_SMA3113 << " "
-                << temp->marks_SMA3121 << " " << temp->marks_SPH3107 << endl;
+                << temp->marks_SMA3113 << " " << temp->marks_SMA3121 << " "
+                << temp->marks_SPH3107 << " "
+                << temp->totalMarks << " " << temp->grade << " " << temp->average << endl;
         temp = temp->next;
     }
 
     outfile.close();
 }
 
-void loadFromFile(Stack &s) {
+void loadFromFile(Stack& s) {
     ifstream infile("stack_data.txt", ios::in);
 
     if (!infile) {
@@ -300,30 +334,27 @@ void loadFromFile(Stack &s) {
 
     int key;
     string first_name, last_name;
-    char gender;
+    char gender, grade;
     int age;
+    float totalMarks, average;
     int marks_FEE3132, marks_FEE3162, marks_FMM3152, marks_SMA3112, marks_SMA3122, marks_SPH3108;
-    int marks_FEE3131, marks_FEE3161,  marks_SMA3113, marks_SMA3121, marks_SPH3107;
+    int marks_FEE3131, marks_FEE3161, marks_SMA3113, marks_SMA3121, marks_SPH3107;
+
     while (infile >> key >> first_name >> last_name >> gender >> age
-                 >> marks_FEE3132 >> marks_FEE3162 >> marks_FMM3152
-                 >> marks_SMA3112 >> marks_SMA3122 >> marks_SPH3108
-                 >> marks_FEE3131 >> marks_FEE3161 
-                 >> marks_SMA3113 >> marks_SMA3121 >> marks_SPH3107) {
-       Node* new_node = new Node(key, first_name, last_name, gender, age,
-                              marks_FEE3132, marks_FEE3162, marks_FMM3152,
-                              marks_SMA3112, marks_SMA3122, marks_SPH3108,marks_FEE3131, marks_FEE3161, 
-                              marks_SMA3113, marks_SMA3121, marks_SPH3107);
-        new_node->marks_FEE3132 = marks_FEE3132;
-        new_node->marks_FEE3162 = marks_FEE3162;
-        new_node->marks_FMM3152 = marks_FMM3152;
-        new_node->marks_SMA3112 = marks_SMA3112;
-        new_node->marks_SMA3122 = marks_SMA3122;
-        new_node->marks_SPH3108 = marks_SPH3108;
-        new_node->marks_FEE3131 = marks_FEE3131;
-        new_node->marks_FEE3161 = marks_FEE3161;
-        new_node->marks_SMA3113 = marks_SMA3113;
-        new_node->marks_SMA3121 = marks_SMA3121;
-        new_node->marks_SPH3107 = marks_SPH3107;
+           >> marks_FEE3132 >> marks_FEE3162 >> marks_FMM3152
+           >> marks_SMA3112 >> marks_SMA3122 >> marks_SPH3108
+           >> marks_FEE3131 >> marks_FEE3161
+           >> marks_SMA3113 >> marks_SMA3121 >> marks_SPH3107
+           >> totalMarks >> grade >> average) {
+        Node* new_node = new Node(key, first_name, last_name, gender, age,
+                                  marks_FEE3132, marks_FEE3162, marks_FMM3152,
+                                  marks_SMA3112, marks_SMA3122, marks_SPH3108,
+                                  marks_FEE3131, marks_FEE3161,
+                                  marks_SMA3113, marks_SMA3121, marks_SPH3107);
+        new_node->totalMarks = totalMarks;
+        new_node->grade = grade;
+        new_node->average = average;
+
         s.push(new_node);
     }
 
@@ -335,6 +366,7 @@ static Stack s1; // Declare s1 as static variable
 void saveOnExit() {
     saveToFile(s1);
 }
+
 
 
 
